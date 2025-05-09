@@ -1,6 +1,8 @@
 # kaye
 COMRPOG
 
+
+       
 import tkinter as tk
 from tkinter import PhotoImage
 import math
@@ -12,7 +14,7 @@ class SuperMarioGame:
         self.root.geometry("1200x600")
         self.canvas = tk.Canvas(root, width=1200, height=600, bg="skyblue")
         self.canvas.pack()
-
+        
         # Load Mario body (You need to replace 'mario.png' with an actual image file path)
         self.mario_run1 = PhotoImage(file=r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\super_mario1.png")
         self.mario_run2 = PhotoImage(file=r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\super_mario2.png")
