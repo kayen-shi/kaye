@@ -236,9 +236,9 @@ class SuperMarioGame:
 
         self.canvas.create_text(600, 100, text="Game Over!", font=("Times New Roman", 50, "bold"), fill="dark red")
 
-        self.canvas.create_text(600, 150, text=f"Total Score: {self.score}", font=("Times New Roman", 20,), fill="black")
+        self.canvas.create_text(600, 200, text=f"Total Score: {self.score}", font=("Times New Roman", 20,), fill="black")
 
-        self.canvas.create_text(600, 200, text="Thank You For Playing!", font=("Times New Roman", 20, "bold"), fill="yellow")
+        self.canvas.create_text(600, 300, text="Thank You For Playing!", font=("Times New Roman", 40, "bold"), fill="yellow")
 
 root = tk.Tk()
 game = SuperMarioGame(root)
