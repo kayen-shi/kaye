@@ -56,7 +56,7 @@ class SuperMarioGame:
 
         self.score_label = self.canvas.create_text(70, 30, text=f"Score: {self.score}", font=("Times New Roman", 18, "bold"), fill="yellow")
 
-        self.player_name_label = self.canvas.create_text(600, 480, text=self.player_name, font=("Times New Roman", 18, "bold"), fill="black")
+        self.player_name_label = self.canvas.create_text(600, 480, text=self.player_name, font=("Times New Roman", 18, "bold"), fill="yellow")
 
     def initialize_game(self):
 
@@ -234,9 +234,9 @@ class SuperMarioGame:
         self.canvas.delete(self.option_b)
         self.canvas.delete(self.option_c)
 
-        self.canvas.create_text(600, 100, text="Game Over!", font=("Times New Roman", 40, "bold"), fill="dark red")
+        self.canvas.create_text(600, 100, text="Game Over!", font=("Times New Roman", 50, "bold"), fill="dark red")
 
-        self.canvas.create_text(600, 150, text=f"Final Score: {self.score}", font=("Times New Roman", 20,), fill="black")
+        self.canvas.create_text(600, 150, text=f"Total Score: {self.score}", font=("Times New Roman", 20,), fill="black")
 
         self.canvas.create_text(600, 200, text="Thank You For Playing!", font=("Times New Roman", 20, "bold"), fill="yellow")
 
