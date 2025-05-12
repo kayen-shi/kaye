@@ -1,12 +1,17 @@
 import tkinter as tk
 from tkinter import PhotoImage
 import random
+import pygame
 
 class SuperMarioGame:
     def __init__(self, root):
         self.root = root
         self.root.title("Super Mario Quiz Game")
         self.root.geometry("1200x600")
+
+        pygame.mixer.init()
+        
+        self.play_background_music()
         
         self.canvas = tk.Canvas(root, width=1200, height=600, bg="skyblue")
         self.canvas.pack()
@@ -14,8 +19,10 @@ class SuperMarioGame:
         self.background_image = PhotoImage(file=r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\background_image.png")
         self.canvas.create_image(0, 0, anchor=tk.NW, image=self.background_image)
 
-        self.welcome_text = self.canvas.create_text(600, 100, text="Welcome to Super Mario Quiz Game!", font=("Times New Roman", 30, "bold"), fill="yellow")
-
+        self.main_welcome_text = self.canvas.create_text(600, 100, text="Welcome to Super Mario Quiz Game!", font=("Times New Roman", 40, "bold"), fill="yellow")
+        
+        self.made_by_text = self.canvas.create_text(600, 150, text="MADE BY QUIZBA", font=("Times New Roman", 13, "bold"), fill="yellow")
+        
         self.name_prompt = self.canvas.create_text(624, 255, text=" ENTER YOUR NAME: ", font=("Times New Roman", 15, "bold"), fill="black")
 
         self.name_entry = tk.Entry(root, font=("Times New Roman", 18))
@@ -24,8 +31,6 @@ class SuperMarioGame:
         self.start_button = tk.Button(root, text="Start Game", font=("Times New Roman", 20), command=self.start_game)
         self.start_button.place(x=550, y=320)
 
-        self.canvas.itemconfig(self.welcome_text, state="normal")
-        self.canvas.itemconfig(self.name_prompt, state="normal")
         self.start_button.place(x=550, y=320)
 
         self.player_name = ""
@@ -40,6 +45,32 @@ class SuperMarioGame:
 
         self.player_name_label = None
 
+    
+    def play_background_music(self):
+        music_path = r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\background_music.mp3"
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.2)
+
+    def play_coin_sound(self):
+        coin_sound_path = r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\coin_sound.mp3"
+        coin_sound = pygame.mixer.Sound(coin_sound_path)
+        coin_sound.play()
+
+    def play_game_over_sound(self):
+        game_over_sound_path = r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\game_over.mp3"
+        game_over_sound = pygame.mixer.Sound(game_over_sound_path)
+        game_over_sound.play()
+
+    def play_wrong_answer_sound(self):
+        try:
+            wrong_answer_sound_path = r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\wrong_answer.mp3"
+            wrong_answer_sound = pygame.mixer.Sound(wrong_answer_sound_path)
+            wrong_answer_sound.set_volume(1.0)
+            wrong_answer_sound.play()
+        except pygame.error:
+            print("Wrong answer sound file not found.")
+
     def start_game(self):
         
         self.player_name = self.name_entry.get()
@@ -47,7 +78,8 @@ class SuperMarioGame:
         if self.player_name == "":
             self.player_name = "Player"
         
-        self.canvas.delete(self.welcome_text)
+        self.canvas.delete(self.main_welcome_text)
+        self.canvas.delete(self.made_by_text)
         self.canvas.delete(self.name_prompt)
         self.name_entry.place_forget()
         self.start_button.place_forget()
@@ -80,11 +112,11 @@ class SuperMarioGame:
         self.scroll_speed = 5
 
         self.questions = [
-            {"question": "WHAT IS THE COLOR OF THE SUN?", "answers": ["yellow", "green", "red"], "correct": "A"},
-            {"question": "WHAT DO COWS DRINK?", "answers": ["water", "milk", "juice"], "correct": "B"},
-            {"question": "WHAT IS 2 + 2?", "answers": ["3", "4", "5"], "correct": "B"},
-            {"question": "WHAT IS THE CAPITAL OF FRANCE?", "answers": ["Berlin", "Paris", "Madrid"], "correct": "B"},
-            {"question": "WHAT PLANET IS KNOWN AS THE RED PLANET?", "answers": ["Mars", "Venus", "Jupiter"], "correct": "A"}
+            {"question": "WHAT IS THE CORRECT WAY TO WRITE A COMMENT IN PYTHON?", "answers": ["//This is a comment", "#This is a comment", "/*This is a comment*/"], "correct": "B"},
+            {"question": "WHICH KEYWORD IS USED TO DEFINE A CLASS IN PYTHON?", "answers": ["class", "def", "object"], "correct": "A"},
+            {"question": "WHICH WIDGET IS USED TO DISPLAY A LABEL IN TKINTER WINDOW?", "answers": ["Label()", "Button()", "Text()"], "correct": "A"},
+            {"question": "WHICH WIDGET ALLOWS USERS TO INPUT TEXT IN A TKINTER WINDOW?", "answers": ["Text()", "Label()", "Entry()"], "correct": "B"},
+            {"question": "GWAPO SI SIR JERALD?", "answers": ["Yes", "Oo", "Murag"], "correct": "C"}
         ]
 
         self.current_question_index = 0
@@ -92,10 +124,10 @@ class SuperMarioGame:
         self.question_boxes = []
         self.create_question_boxes()
 
-        self.question_text = self.canvas.create_text(600, 50, text=self.questions[self.current_question_index]["question"], font=("Times New Roman", 18, "bold"), fill="black")
-        self.option_a = self.canvas.create_text(400, 100, text=f"A.) {self.questions[self.current_question_index]['answers'][0]}", font=("Times New Roman", 17, "bold"), fill="black")
-        self.option_b = self.canvas.create_text(600, 100, text=f"B.) {self.questions[self.current_question_index]['answers'][1]}", font=("Times New Roman", 17, "bold"), fill="black")
-        self.option_c = self.canvas.create_text(800, 100, text=f"C.) {self.questions[self.current_question_index]['answers'][2]}", font=("Times New Roman", 17, "bold"), fill="black")
+        self.question_text = self.canvas.create_text(600, 50, text=self.questions[self.current_question_index]["question"], font=("Times New Roman", 19, "bold"), fill="black")
+        self.option_a = self.canvas.create_text(350, 100, text=f"A.) {self.questions[self.current_question_index]['answers'][0]}", font=("Ariel", 15, "bold"), fill="black")
+        self.option_b = self.canvas.create_text(600, 100, text=f"B.) {self.questions[self.current_question_index]['answers'][1]}", font=("Ariel", 14, "bold"), fill="black")
+        self.option_c = self.canvas.create_text(850, 100, text=f"C.) {self.questions[self.current_question_index]['answers'][2]}", font=("Ariel", 15, "bold"), fill="black")
 
         self.root.bind("<Left>", self.move_left)
         self.root.bind("<Right>", self.move_right)
@@ -192,7 +224,6 @@ class SuperMarioGame:
         )
 
     def handle_answer(self, box_info):
- 
         for box in self.question_boxes:
             self.canvas.delete(box["brick"])
             self.canvas.delete(box["letter"])
@@ -200,10 +231,12 @@ class SuperMarioGame:
 
         if box_info["answer"] == self.questions[self.current_question_index]["correct"]:
             self.score += 5
+            self.play_coin_sound()
             result_text = "CORRECT!!!"
             result_color = "green"
         else:
             self.score -= 2
+            self.play_wrong_answer_sound()
             result_text = "WRONG!!!"
             result_color = "red"
 
@@ -228,11 +261,24 @@ class SuperMarioGame:
             self.end_game()
 
     def end_game(self):
+
+        pygame.mixer.music.set_volume(0.1)  
+
+        self.play_game_over_sound()
+
+        self.root.after(2000, pygame.mixer.music.stop)
         self.canvas.delete(self.body)
         self.canvas.delete(self.question_text)
         self.canvas.delete(self.option_a)
         self.canvas.delete(self.option_b)
         self.canvas.delete(self.option_c)
+
+        if self.result_text:
+            self.canvas.delete(self.result_text)
+
+        if self.player_name_label:
+            self.canvas.delete(self.player_name_label)
+            self.player_name_label = None
 
         self.canvas.create_text(600, 100, text="Game Over!", font=("Times New Roman", 50, "bold"), fill="dark red")
 
