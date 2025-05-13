@@ -6,7 +6,7 @@ import pygame
 class SuperMarioGame:
     def __init__(self, root):
         self.root = root
-        self.root.title("Super Mario Quiz Game")
+        self.root.title("Super Mario Quiz Game System")
         self.root.geometry("1200x600")
 
         pygame.mixer.init()
@@ -19,9 +19,9 @@ class SuperMarioGame:
         self.background_image = PhotoImage(file=r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\background_image.png")
         self.canvas.create_image(0, 0, anchor=tk.NW, image=self.background_image)
 
-        self.main_welcome_text = self.canvas.create_text(600, 100, text="Welcome to Super Mario Quiz Game!", font=("Times New Roman", 40, "bold"), fill="yellow")
+        self.main_welcome_text = self.canvas.create_text(600, 100, text="Welcome to Super Mario Quiz Game System!", font=("Times New Roman", 40, "bold"), fill="yellow")
         
-        self.made_by_text = self.canvas.create_text(600, 150, text="MADE BY QUIZBA", font=("Times New Roman", 13, "bold"), fill="yellow")
+        self.made_by_text = self.canvas.create_text(600, 150, text="MADE BY QUIZBA-IT1G", font=("Times New Roman", 13, "bold"), fill="yellow")
         
         self.name_prompt = self.canvas.create_text(624, 255, text=" ENTER YOUR NAME: ", font=("Times New Roman", 15, "bold"), fill="black")
 
