@@ -2,22 +2,21 @@ import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 import random
-import pygame  # Import pygame
+import pygame
 
 class GrammarGladiatorsGame:
     def __init__(self, root):
-        pygame.mixer.init()  # Initialize the mixer module for sound
-        
+        pygame.mixer.init() 
+
         self.root = root
         self.root.title("Grammar Gladiators")
         self.root.geometry("1200x600")
         
-        self.game_over = False  # Flag to check if the game is over
+        self.game_over = False
 
         self.canvas = tk.Canvas(root, width=1200, height=600, bg="green")
         self.canvas.pack()
 
-        # Load Images
         self.background_image = Image.open(r"C:\Users\Admin\OneDrive\Desktop\zombie\background_zombie.png")
         self.background_image_resized = ImageTk.PhotoImage(self.background_image.resize((1200, 600), Image.Resampling.LANCZOS))
         self.canvas.create_image(0, 0, anchor=tk.NW, image=self.background_image_resized)
@@ -25,10 +24,8 @@ class GrammarGladiatorsGame:
         self.plant_image = ImageTk.PhotoImage(Image.open(r"C:\Users\Admin\OneDrive\Desktop\zombie\plant_image2.png").resize((100, 100), Image.Resampling.LANCZOS))
         self.plant = self.canvas.create_image(200, 500, image=self.plant_image)
 
-        # Game Title
         self.game_title = self.canvas.create_text(600, 95, text="Welcome to Grammar Gladiators!", font=("Times New Roman", 40, "bold"), fill="yellow")
 
-        # Player Name Entry
         self.enter_name_text = self.canvas.create_text(630, 165, text="ENTER YOUR NAME:", font=("Times New Roman", 13, "bold"), fill="black")
         self.name_entry = tk.Entry(root, font=("Times New Roman", 18))
         self.name_entry.place(x=500, y=180)
@@ -36,7 +33,6 @@ class GrammarGladiatorsGame:
         self.start_button = tk.Button(root, text="Start Game", font=("Times New Roman", 20), command=self.start_game)
         self.start_button.place(x=550, y=250)
 
-        # Game variables
         self.score = 0
         self.lives = 3
         self.zombie_speed = 5
@@ -46,7 +42,6 @@ class GrammarGladiatorsGame:
         self.zombies = []
         self.projectiles = []
 
-        # Sample Questions
         self.questions = [
             {"question": "WHICH WORD IS A NOUN?", "answers": ["run", "apple", "quickly"], "correct": "B"},
             {"question": "WHAT IS A VERB?", "answers": ["jump", "happy", "desk"], "correct": "A"},
@@ -55,16 +50,13 @@ class GrammarGladiatorsGame:
             {"question": "WHAT IS A PRONOUN?", "answers": ["she", "bike", "run"], "correct": "A"}
         ]
 
-        # Zombie image
         self.zombie_image = Image.open(r"C:\Users\Admin\OneDrive\Desktop\zombie\zombie.png")
         self.zombie_image_resized = ImageTk.PhotoImage(self.zombie_image.resize((100, 100), Image.Resampling.LANCZOS))
 
-        # Load music
         self.background_music = r"C:\Users\Admin\OneDrive\Desktop\zombie\background_music.mp3"
         self.in_game_music = r"C:\Users\Admin\OneDrive\Desktop\zombie\in_game_music.mp3"
         self.game_over_music = r"C:\Users\Admin\OneDrive\Desktop\zombie\game_over_music.mp3"
 
-        # Play background music when game runs
         pygame.mixer.music.load(self.background_music)
         pygame.mixer.music.play(-1)
 
@@ -73,22 +65,18 @@ class GrammarGladiatorsGame:
         if self.player_name == "":
             self.player_name = "Player"
 
-        # Remove entry and button
         self.name_entry.place_forget()
         self.start_button.place_forget()
         self.canvas.delete(self.enter_name_text)
         self.canvas.delete(self.game_title)
 
-        # Stop background music and play in-game music
         pygame.mixer.music.stop()
         pygame.mixer.music.load(self.in_game_music)
         pygame.mixer.music.play(-1)
 
-        # Display first question
         self.display_question()
         self.update_score_life()
 
-        # Start game loop
         self.spawn_zombie()
         self.update_game()
 
