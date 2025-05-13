@@ -281,17 +281,14 @@ class SuperMarioGame:
             monster_coords = self.canvas.coords(self.cat_monster)
             player_coords = self.canvas.coords(self.body)
 
-            # Check for collision with Mario
             if self.check_monster_collision(player_coords, monster_coords):
                 self.handle_monster_collision()
                 return
-
-            # Move the monster left
+            
             if monster_coords[0] > 0:
                 self.canvas.move(self.cat_monster, -self.monster_speed, 0)
                 self.root.after(50, self.move_monster)
             else:
-                # If the monster goes off-screen, deactivate it
                 self.monster_active = False
                 self.canvas.delete(self.cat_monster)
 
@@ -308,19 +305,17 @@ class SuperMarioGame:
         player_coords = self.canvas.coords(self.body)
         monster_coords = self.canvas.coords(self.cat_monster)
 
-        # If Mario is above the monster and falling, defeat the monster
         if player_coords[1] < monster_coords[1]:
-            self.score += 5  # Reward points for defeating the monster
+            self.score += 5
             self.play_coin_sound()
             self.canvas.delete(self.cat_monster)
             self.monster_active = False
         else:
-            self.score -= 2  # Deduct points if Mario is hit
+            self.score -= 2
             self.play_wrong_answer_sound()
             self.canvas.delete(self.cat_monster)
             self.monster_active = False
 
-        # Update the score display
         self.canvas.itemconfig(self.score_label, text=f"Score: {self.score}")
 
 
