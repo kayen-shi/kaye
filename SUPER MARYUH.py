@@ -45,7 +45,12 @@ class SuperMarioGame:
 
         self.player_name_label = None
 
-    
+                # Cat Monster Initialization
+        self.cat_monster_image = PhotoImage(file=r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\monster.png")
+        self.cat_monster = None
+        self.monster_speed = 5
+        self.monster_active = False
+
     def play_background_music(self):
         music_path = r"C:\Users\Admin\OneDrive\Videos\Captures\mario_quiz_game\background_music.mp3"
         pygame.mixer.music.load(music_path)
@@ -239,6 +244,7 @@ class SuperMarioGame:
             self.play_wrong_answer_sound()
             result_text = "WRONG!!!"
             result_color = "red"
+            self.spawn_monster()
 
         self.canvas.itemconfig(self.score_label, text=f"Score: {self.score}")
 
@@ -260,8 +266,69 @@ class SuperMarioGame:
         if self.current_question_count >= self.max_questions:
             self.end_game()
 
-    def end_game(self):
+    def spawn_monster(self):
+    
+        if not self.monster_active:
+            self.monster_active = True
+            start_x = 1200
+            start_y = 525
+            self.cat_monster = self.canvas.create_image(start_x, start_y, image=self.cat_monster_image)
+            self.move_monster()
 
+    def move_monster(self):
+    
+        if self.monster_active:
+            monster_coords = self.canvas.coords(self.cat_monster)
+            player_coords = self.canvas.coords(self.body)
+
+            # Check for collision with Mario
+            if self.check_monster_collision(player_coords, monster_coords):
+                self.handle_monster_collision()
+                return
+
+            # Move the monster left
+            if monster_coords[0] > 0:
+                self.canvas.move(self.cat_monster, -self.monster_speed, 0)
+                self.root.after(50, self.move_monster)
+            else:
+                # If the monster goes off-screen, deactivate it
+                self.monster_active = False
+                self.canvas.delete(self.cat_monster)
+
+    def check_monster_collision(self, player_coords, monster_coords):
+
+        return (
+            player_coords[0] + 25 >= monster_coords[0] - 25 and 
+            player_coords[0] - 25 <= monster_coords[0] + 25 and 
+            player_coords[1] + 25 >= monster_coords[1] - 25 and 
+            player_coords[1] - 25 <= monster_coords[1] + 25
+        )
+
+    def handle_monster_collision(self):
+        player_coords = self.canvas.coords(self.body)
+        monster_coords = self.canvas.coords(self.cat_monster)
+
+        # If Mario is above the monster and falling, defeat the monster
+        if player_coords[1] < monster_coords[1]:
+            self.score += 5  # Reward points for defeating the monster
+            self.play_coin_sound()
+            self.canvas.delete(self.cat_monster)
+            self.monster_active = False
+        else:
+            self.score -= 2  # Deduct points if Mario is hit
+            self.play_wrong_answer_sound()
+            self.canvas.delete(self.cat_monster)
+            self.monster_active = False
+
+        # Update the score display
+        self.canvas.itemconfig(self.score_label, text=f"Score: {self.score}")
+
+
+    def end_game(self):
+        if self.monster_active:
+            self.canvas.delete(self.cat_monster)
+            self.monster_active = False
+            
         pygame.mixer.music.set_volume(0.1)  
 
         self.play_game_over_sound()
