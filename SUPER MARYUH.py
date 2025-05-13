@@ -244,7 +244,7 @@ class SuperMarioGame:
 
         self.result_text = self.canvas.create_text(600, 300, text=result_text, font=("Times New Roman", 30, "bold"), fill=result_color)
 
-        self.canvas.after(500, self.canvas.delete, self.result_text)
+        self.canvas.after(2500, self.canvas.delete, self.result_text)
 
         self.current_question_index = (self.current_question_index + 1) % len(self.questions)
 
